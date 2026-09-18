@@ -35,7 +35,6 @@ function Navbar() {
 
   return (
     <>
-      <div className="topbar"><div className="container topbar-inner"><span>DAC MEANS TOTAL SOLUTIONS · KINGDOM OF BAHRAIN</span><div><a href={company.phoneHref}>{company.phone}</a><a href={company.whatsappHref} target="_blank" rel="noreferrer">WhatsApp Maintenance</a></div></div></div>
       <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
         <div className="container nav-inner">
           <Brand />
