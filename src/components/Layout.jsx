@@ -14,7 +14,7 @@ function Brand({ inverse = false }) {
   return (
     <Link to="/" className={`brand ${inverse ? 'brand-inverse' : ''}`} aria-label="DAC Contracting home">
       <span className="brand-mark" aria-hidden="true"><i>D</i></span>
-      <span><strong>DAC CONTRACTING</strong><small>W.L.L. · TOTAL SOLUTIONS</small></span>
+      <span><strong>DAC CONTRACTING</strong><small>دي اي سي للمقاولات ذ.م.م · TOTAL SOLUTIONS</small></span>
     </Link>
   )
 }
@@ -42,7 +42,7 @@ function Navbar() {
           <nav className="desktop-nav" aria-label="Primary navigation">
             {nav.map(([label, path]) => <NavLink key={path} to={path}>{label}</NavLink>)}
           </nav>
-          <Button to="/contact" className="nav-cta">Let&apos;s Talk</Button>
+          <Button to="/contact" className="nav-cta">Book a Service</Button>
           <button className="menu-button" onClick={() => setOpen(true)} aria-label="Open navigation" aria-expanded={open}><Menu /></button>
         </div>
       </header>

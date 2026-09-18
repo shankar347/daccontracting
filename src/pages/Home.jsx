@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, CheckCircle2, Clock3, RefreshCw, ShieldCheck, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -5,6 +6,39 @@ import { industries, process, projects, services } from '../data/content'
 import { AnimatedCounter, Button, PlaceholderNote, Reveal, SectionHeading, SEO } from '../components/UI'
 
 const heroImage = 'https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=2200&q=88'
+
+function ServiceCarousel() {
+  const [active, setActive] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const reduce = useReducedMotion()
+  const items = services.slice(0, 6)
+  const step = 360 / items.length
+
+  useEffect(() => {
+    if (reduce || paused) return undefined
+    const timer = window.setInterval(() => setActive(current => (current + 1) % items.length), 2800)
+    return () => window.clearInterval(timer)
+  }, [items.length, paused, reduce])
+
+  return (
+    <motion.div className="hero-3d" initial={{ opacity: 0, scale: .94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .9, delay: .35 }}
+      onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      <div className="hero-3d-scene">
+        <div className="hero-3d-ring" style={{ transform: `rotateY(${-active * step}deg)` }}>
+          {items.map((service, index) => (
+            <div className="hero-3d-card" key={service.id} style={{ transform: `rotateY(${index * step}deg) translateZ(270px)` }}>
+              <div className="hero-3d-visual" style={{ backgroundImage: `linear-gradient(180deg,rgba(4,34,57,.05),rgba(4,34,57,.72)),url("${service.image}")` }}>
+                <span>{service.title.toUpperCase()}</span>
+              </div>
+              <strong>{service.title}</strong><small>{service.summary}</small>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="hero-3d-caption"><span>{items[active].title}</span><i /><span>DAC Total Solutions</span></div>
+    </motion.div>
+  )
+}
 
 export default function Home() {
   const reduce = useReducedMotion()
@@ -20,8 +54,9 @@ export default function Home() {
           <motion.span className="eyebrow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .15 }}>DAC CONTRACTING W.L.L. · BAHRAIN</motion.span>
           <motion.h1 initial={{ opacity: 0, y: 36 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8, ease: [0.22, 1, 0.36, 1] }}>Complete contracting.<br /><em>Dependable comfort.</em></motion.h1>
           <motion.p initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, delay: .18 }}>DAC provides AC repair, preventive maintenance, installation and commercial HVAC support—delivered by one accountable team across the Kingdom of Bahrain.</motion.p>
+          <ServiceCarousel />
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6, delay: .3 }}>
-            <Button to="/contact">Request a Service</Button><Button to="/services" variant="light">Explore Our Services</Button>
+            <Button to="/contact">Book a Service</Button><Button href="https://wa.me/97334370655?text=Hello%20DAC%20Contracting%2C%20I%20would%20like%20to%20book%20a%20service." variant="whatsapp">WhatsApp DAC</Button><Button to="/services" variant="light">View Our Services</Button>
           </motion.div>
         </div>
         <div className="hero-proof"><div className="container"><span><CheckCircle2 />Professional field team</span><span><Clock3 />Priority response workflow</span><span><ShieldCheck />Quality-focused delivery</span></div></div>
@@ -79,8 +114,14 @@ export default function Home() {
       </div></section>
 
       <section className="section testimonial-section"><div className="container testimonial-grid">
-        <SectionHeading light eyebrow="CLIENT FEEDBACK" title="Trust should be supported by real customer voices." text="No approved customer testimonials were included in the supplied DAC reference, so this production layout intentionally avoids fabricated names and quotations." />
-        <Reveal className="testimonial-placeholder"><span>“</span><p>Verified testimonials can be added here after DAC receives written customer approval for the quotation, name, role and company attribution.</p><PlaceholderNote>Customer-approved testimonial pending</PlaceholderNote></Reveal>
+        <SectionHeading eyebrow="CLIENT FEEDBACK" title="Customer feedback, published with permission." text="DAC values long-term relationships and accountable service. Testimonials will appear here only after the customer has approved the quotation and attribution." />
+        <Reveal className="testimonial-panel">
+          <span className="testimonial-label">CLIENT REFERENCES</span>
+          <h3>Customer references are available on request.</h3>
+          <p>Speak with the DAC team about relevant service experience for your property type or HVAC requirement.</p>
+          <div className="testimonial-policy"><span><CheckCircle2 />Approved quotations only</span><span><CheckCircle2 />Verified client attribution</span></div>
+          <Button to="/contact" variant="outline">Request a Reference</Button>
+        </Reveal>
       </div></section>
 
       <section className="section stats-band"><div className="container stats-grid">
